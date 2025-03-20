@@ -67,6 +67,82 @@ public class UserService {
     }
 
 
+    /** --------------------Read by ID Operation // READ: Fetch user by ID-------------------- **/
+
+    // Case - 1
+   @Transactional(readOnly = true)
+   public UserResponseDTO getByUserId(Long userId){
+       log.info("Fetching user with ID: {}", userId);
+
+       // Fetch user or throw exception if not found
+       User user = userRepository.findByUserId(userId)
+               .orElseThrow(() -> {
+                       log.error("User with ID: {} not found", userId);
+               return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+
+   });
+
+       log.info("User with ID: {} retrieved successfully", userId);
+       return mapToUserResponseDTO(user);
+   }
+
+
+    /*// Case - 2
+    public Optional<UserResponseDTO> getUserByUserId(Long userId){
+        return userRepository.findByUserId(userId).map(this::mapToUserResponseDTO);
+    }*/
+
+
+    /**-------------------- Read All Users With Pagination // READ: Fetch all users--------------------**/
+
+    // Case - 1
+    @Transactional(readOnly = true)
+    public Page<UserResponseDTO> getAllUsers(int page, int size){
+        log.info("Fetching all users - Page: {}, Size: {} ", page, size);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        return userPage.map(this::mapToUserResponseDTO);
+
+    }
+
+    /*//Case - 2
+    public List<UserResponseDTO> getAllUsers(){
+        return userRepository.findAll()
+                .stream()
+                .map(this::mapToUserResponseDTO)
+                .collect(Collectors.toList());
+    }*/
+
+
+    /**-------------------- Update Operation --------------------**/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private UserResponseDTO mapToUserResponseDTO(User user){
+        return UserResponseDTO.builder()
+                .userId(user.getUserId())
+                .userFullName(user.getUserFullName())
+                .userEmail(user.getUserEmail())
+                .password(user.getPassword())
+                .roles(user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toSet()))
+                .build();
+    }
+
 
 
 
