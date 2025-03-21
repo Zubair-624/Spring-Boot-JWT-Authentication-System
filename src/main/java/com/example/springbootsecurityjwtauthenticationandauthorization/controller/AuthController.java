@@ -10,37 +10,55 @@ import com.example.springbootsecurityjwtauthenticationandauthorization.service.R
 import com.example.springbootsecurityjwtauthenticationandauthorization.service.UserService;
 import com.example.springbootsecurityjwtauthenticationandauthorization.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
     private final AuthService authService;
+
+    private final UserService userService;
+
     private final RefreshTokenService refreshTokenService;
-    private final JwtUtil jwtUtil;
 
-    //REGISTER: User registration
+    // User Registration API
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> registerUser(@RequestBody UserRequestDTO request) {
-        UserResponseDTO registeredUser = userService.registerUser(request);
-        return ResponseEntity.ok(registeredUser);
+    public ResponseEntity<UserResponseDTO> registerUser(@RequestBody UserRequestDTO userRequestDTO){
+        log.info("Registering user: {}", userRequestDTO.getEmail());
+
+        UserResponseDTO userResponseDTO = userService.createUser(userRequestDTO);
+
+        return ResponseEntity.ok(userResponseDTO);
     }
 
-    //LOGIN: Authenticate user & return JWT tokens
+    // Login API
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> authenticateUser(@RequestBody AuthRequestDTO request) {
-        return ResponseEntity.ok(authService.authenticateUser(request));
+    public ResponseEntity<AuthResponseDTO> loginUser(@RequestBody AuthRequestDTO authRequestDTO){
+        log.info("User login attempt: {}", authRequestDTO.getEmail());
+
+        AuthResponseDTO  authResponse = authService.authenticateUser(authRequestDTO);
+
+        return ResponseEntity.ok(authResponse);
+
     }
 
-    //REFRESH TOKEN: Get a new access token using refresh token
+    // Refresh Token API
     @PostMapping("/refresh-token")
-    public ResponseEntity<AuthResponseDTO> refreshAccessToken(@RequestParam String refreshToken) {
-        RefreshToken newToken = refreshTokenService.validateRefreshToken(refreshToken);
-        String newAccessToken = jwtUtil.generateToken(newToken.getUser().getEmail());
-        return ResponseEntity.ok(new AuthResponseDTO(newAccessToken, refreshToken));
+    public ResponseEntity<RefreshToken> refreshToken(@RequestParam String refreshToken) {
+        log.info("Refreshing access token using refresh token: {}", refreshToken);
+
+        return ResponseEntity.ok(refreshTokenService.validateRefreshToken(refreshToken));
     }
+
+
+
 }
+
+
+
