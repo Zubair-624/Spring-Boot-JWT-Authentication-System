@@ -2,12 +2,14 @@ package com.example.springbootsecurityjwtauthenticationandauthorization.reposito
 
 import com.example.springbootsecurityjwtauthenticationandauthorization.model.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface TokenRepository extends JpaRepository<Token, String> {
+@Repository
+public interface TokenRepository extends JpaRepository<Token, Long> {
 
-    List<Token> findTokenByUserId(String userId);
+    List<Token> findByUser_UserId(Long userId);
 
 
 }

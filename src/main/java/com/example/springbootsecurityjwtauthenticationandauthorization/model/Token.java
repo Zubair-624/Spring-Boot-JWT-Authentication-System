@@ -35,8 +35,9 @@ public class Token {
 
     @PrePersist
     public void hashToken(){
-        this.token = hashSHA256(this.token);
+        this.token = HashUtil.hashSHA256(this.token);
     }
+
 
     private String hashSHA256(String input) {
         try {
