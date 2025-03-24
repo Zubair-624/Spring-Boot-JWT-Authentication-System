@@ -19,13 +19,15 @@ public class TokenService {
         return tokenRepository.save(token);
     }
 
-    public List<Token> findByToken(String token){
-        return tokenRepository.findTokenByUserId(token);
+    public List<Token> findTokensByUserId(Long userId) { //
+        return tokenRepository.findByUser_UserId(userId);
     }
 
-    public void revokeToken(String token){
-        tokenRepository.findTokenByUserId(token).ifPresent(tokenRepository::delete);
+    public void revokeToken(Long userId) {
+        List<Token> tokens = tokenRepository.findByUser_UserId(userId);
+        tokens.forEach(tokenRepository::delete);
     }
+
 
 
 }

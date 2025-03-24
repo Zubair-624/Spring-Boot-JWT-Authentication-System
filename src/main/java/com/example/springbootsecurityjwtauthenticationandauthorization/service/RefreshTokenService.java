@@ -47,7 +47,7 @@ public class RefreshTokenService {
 
                 });
 
-        if (refreshToken.getExpiryDate().isBefore(Instant.now())) {
+        if (refreshToken.getExpiryDate() == null || refreshToken.getExpiryDate().isBefore(Instant.now())) {
             log.error("Expired refresh token: {}", token);
             refreshTokenRepository.delete(refreshToken);
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Expired refresh token");

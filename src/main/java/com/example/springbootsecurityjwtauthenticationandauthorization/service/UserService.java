@@ -6,7 +6,7 @@ import com.example.springbootsecurityjwtauthenticationandauthorization.model.Rol
 import com.example.springbootsecurityjwtauthenticationandauthorization.model.User;
 import com.example.springbootsecurityjwtauthenticationandauthorization.repository.RoleRepository;
 import com.example.springbootsecurityjwtauthenticationandauthorization.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -51,7 +51,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Role USER not found"));
 
         // Encrypt the user's password before storing it
-        String hashedPassword = passwordEncoder.encode(UserRequestDTO.getPassword())
+        String hashedPassword = passwordEncoder.encode(userRequestDTO.getPassword());
 
         // Create a new User entity (but NOT saved yet)
         User user = User.builder()

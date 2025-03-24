@@ -1,6 +1,7 @@
 package com.example.springbootsecurityjwtauthenticationandauthorization.service;
 
 import com.example.springbootsecurityjwtauthenticationandauthorization.dto.RoleDTO;
+import com.example.springbootsecurityjwtauthenticationandauthorization.model.Role;
 import com.example.springbootsecurityjwtauthenticationandauthorization.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.management.relation.Role;
 import java.util.List;
 import java.util.stream.Collectors;
 
