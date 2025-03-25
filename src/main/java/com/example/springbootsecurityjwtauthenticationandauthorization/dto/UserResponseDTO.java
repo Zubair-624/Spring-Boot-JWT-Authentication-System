@@ -14,11 +14,11 @@ import java.util.Set;
 @Builder
 public class UserResponseDTO {
 
-    private Long id;
+    private Long userId;
 
-    private String fullName;
+    private String userFullName;
 
-    private String email;
+    private String userEmail;
 
     private Set<String> roles;
 }
